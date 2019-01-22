@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "tsc": "latest",
+    "typescript": "^3.2.4"
+  }
+}
