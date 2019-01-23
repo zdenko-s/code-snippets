@@ -4,7 +4,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "tsc": "latest",
     "typescript": "^3.2.4"
   }
 }

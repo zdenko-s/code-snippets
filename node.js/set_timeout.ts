@@ -14,12 +14,14 @@ export class ServiceBrokerCallback {
         */
         setTimeout(() => {
             this.dbRet = { Conn: 123 };
-        }, 1000);
+            console.log("setTimeout elapsed");
+        }, 5000);
 
         let timeout = new Promise((resolve, reject) => {
             let id = setTimeout(() => {
                 //clearTimeout(id);
                 //reject('Timed out in 3000 ms.')
+                console.log("Promise A timeout elapsed. Resolve Promise");
                 resolve({ Connection: "connstr" });
             }, 3000);
         });
@@ -30,6 +32,7 @@ export class ServiceBrokerCallback {
             let id = setTimeout(() => {
                 //clearTimeout(id);
                 //reject('Timed out in 3000 ms.')
+                console.log("Promise timeout elapsed. Resolve Promise");
                 resolve({ Connection: "connstr" });
             }, 3000);
         });
@@ -44,10 +47,11 @@ export class ServiceBrokerCallback {
             }, 3000);
         }, 2000);
         //*/
-        await new Promise(resolve => setTimeout(resolve, 20000));
-        console.log("1st timeout elapsed.");
-        await new Promise(resolve => setTimeout(resolve, 15000));
-        console.log("2n timeout elapsed.");
+        console.log("awaiting Promise");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log("Promise 1 timeout elapsed.");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log("Promise 2 timeout elapsed.");
         this.dbRet = { conn: "ConnectionStringX" }; // Here comes real data
     };
 }
