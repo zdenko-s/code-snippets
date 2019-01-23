@@ -50,8 +50,12 @@ export class ServiceBrokerCallback {
         console.log("awaiting Promise");
         await new Promise(resolve => setTimeout(resolve, 2000));
         console.log("Promise 1 timeout elapsed.");
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        console.log("Promise 2 timeout elapsed.");
+        const ret = await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(777);
+            }, 2000);
+          });
+        console.log(`Promise 2 timeout elapsed. Resolved value ${ret}`);
         this.dbRet = { conn: "ConnectionStringX" }; // Here comes real data
     };
 }
