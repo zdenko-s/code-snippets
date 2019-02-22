@@ -1,4 +1,5 @@
 
+//
 export class ServiceBrokerCallback {
     private dbRet: any;
     async lengthyDBMethod(params: any): Promise<void> {
