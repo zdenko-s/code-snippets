@@ -21,7 +21,13 @@ mainSteps:
       Runtime: PowerShell 7.4
       InputPayload:
         stringOfJson: '{{ GetParameter.json }}'
-      Script: return ($env:InputPayload | ConvertFrom-Json).stringOfJson;
+      Script: |-
+        $s = ($env:InputPayload | ConvertFrom-Json).stringOfJson;
+        #Write-Host "s:$s"
+        $o = ConvertFrom-Json $s;
+        $o | Add-Member -NotePropertyName 'VU_ECF_CDN_UI_VERSION' -NotePropertyValue "123" -Force;
+        $s = ConvertTo-Json $o;
+        return $s;
     outputs:
       - Type: String
         Selector: $.Payload
@@ -33,11 +39,10 @@ mainSteps:
       DocumentName: AWS-RunPowerShellScript
       Parameters:
         commands: |-
-          write-host '{{ ConverParam.PayloadData }}'
-          $p = '{{ ConverParam.PayloadData }}'
-          write-host "p: $p"
-          $b = ConvertFrom-json $p
-          Write-Host "b.obj: $($b.obj)";
-          Write-Host "$b.obj json:$(ConvertTo-Json $b.obj)"
+          write-host '{{ ConverParam.PayloadData }}';
+          $p = '{{ ConverParam.PayloadData }}';
+          write-host "p: $p";
+          $b = ConvertFrom-json $p;
+          $b;
       InstanceIds:
         - i-024cb55088cb348b8
