@@ -1,0 +1,43 @@
+schemaVersion: '0.3'
+description: Test
+mainSteps:
+  - name: GetParameter
+    action: aws:executeAwsApi
+    nextStep: ConverParam
+    isEnd: false
+    inputs:
+      Service: ssm
+      Api: GetParameter
+      Name: /dscc/test_object
+    outputs:
+      - Type: String
+        Selector: $.Parameter.Value
+        Name: json
+  - name: ConverParam
+    action: aws:executeScript
+    nextStep: PrintSsmVar
+    isEnd: false
+    inputs:
+      Runtime: PowerShell 7.4
+      InputPayload:
+        stringOfJson: '{{ GetParameter.json }}'
+      Script: return ($env:InputPayload | ConvertFrom-Json).stringOfJson;
+    outputs:
+      - Type: String
+        Selector: $.Payload
+        Name: PayloadData
+  - name: PrintSsmVar
+    action: aws:runCommand
+    isEnd: true
+    inputs:
+      DocumentName: AWS-RunPowerShellScript
+      Parameters:
+        commands: |-
+          write-host '{{ ConverParam.PayloadData }}'
+          $p = '{{ ConverParam.PayloadData }}'
+          write-host "p: $p"
+          $b = ConvertFrom-json $p
+          Write-Host "b.obj: $($b.obj)";
+          Write-Host "$b.obj json:$(ConvertTo-Json $b.obj)"
+      InstanceIds:
+        - i-024cb55088cb348b8
